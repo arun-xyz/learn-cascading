@@ -1,0 +1,19 @@
+**/dependency-reduced-pom.xml
+dependency-reduced-pom.xml
+
+**/.DS_Store
+.DS_Store
+
+**/target
+target
+
+**/.idea
+.idea
+
+*.iml
+**/*.iml
+
+**/*.bak
+
+#Ignoring test files.
+**/generated/*.json
