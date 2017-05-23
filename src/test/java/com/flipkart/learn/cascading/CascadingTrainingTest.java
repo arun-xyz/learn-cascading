@@ -32,11 +32,11 @@ public class CascadingTrainingTest {
     public void testInnerJoinAssembly() throws Exception {
             Plunger plunger = new Plunger();
         Data employeeInfoData = new DataBuilder(new Fields("name","place", "salary"))
-                .addTuples(JunitTestsHelper.getTuples("/Users/arun.agarwal/projects/learn-cascading/src/test/resources/assembled_joins/employee.info.input", CharMatcher.is(',')))
+                .addTuples(JunitTestsHelper.getTuples("src/test/resources/assembled_joins/employee.info.input", CharMatcher.is(',')))
                 .build();
 
         Data regionAverageData = new DataBuilder(new Fields("region", "average"))
-                .addTuples(JunitTestsHelper.getTuples("/Users/arun.agarwal/projects/learn-cascading/src/test/resources/assembled_joins/region.average.output", CharMatcher.BREAKING_WHITESPACE))
+                .addTuples(JunitTestsHelper.getTuples("src/test/resources/assembled_joins/region.average.output", CharMatcher.BREAKING_WHITESPACE))
                 .build();
 
         Pipe employeeInfoPipe = plunger.newNamedPipe("employeeInfoPipe", employeeInfoData);
@@ -46,7 +46,7 @@ public class CascadingTrainingTest {
 
         //Test 1:
         Bucket bucket = plunger.newBucket(new Fields("name", "place", "salary", "region", "average"), dataJoinerAssemblyTest.getTails()[0]);
-        compareResultsWithGold(bucket, "/Users/arun.agarwal/projects/learn-cascading/src/test/resources/assembled_joins/inner.join.output.gold", new Fields("name"));
+        compareResultsWithGold(bucket, "src/test/resources/assembled_joins/inner.join.output.gold", new Fields("name"));
 
     }
 
@@ -54,20 +54,20 @@ public class CascadingTrainingTest {
     public void testOuterJoinAssembly() throws Exception {
         Plunger plunger = new Plunger();
         Data employeeInfoData = new DataBuilder(new Fields("name","place", "salary"))
-                .addTuples(JunitTestsHelper.getTuples("/Users/arun.agarwal/projects/learn-cascading/src/test/resources/assembled_joins/employee.info.input", CharMatcher.is(',')))
+                .addTuples(JunitTestsHelper.getTuples("src/test/resources/assembled_joins/employee.info.input", CharMatcher.is(',')))
                 .build();
 
         Data regionAverageData = new DataBuilder(new Fields("region", "average"))
-                .addTuples(JunitTestsHelper.getTuples("/Users/arun.agarwal/projects/learn-cascading/src/test/resources/assembled_joins/region.average.output", CharMatcher.BREAKING_WHITESPACE))
+                .addTuples(JunitTestsHelper.getTuples("src/test/resources/assembled_joins/region.average.output", CharMatcher.BREAKING_WHITESPACE))
                 .build();
 
         Pipe employeeInfoPipe = plunger.newNamedPipe("employeeInfoPipe", employeeInfoData);
         Pipe regionAveragePipe = plunger.newNamedPipe("regionAveragePipe", regionAverageData);
 
         SubAssembly dataJoinerAssemblyTest = new JoinerAssembly(employeeInfoPipe, regionAveragePipe);
-        
+
         //Test 2:
         Bucket bucket1 = plunger.newBucket(new Fields("name", "place", "salary", "region", "average"), dataJoinerAssemblyTest.getTails()[1]);
-        compareResultsWithGold(bucket1, "/Users/arun.agarwal/projects/learn-cascading/src/test/resources/assembled_joins/outer.join.output.gold", new Fields("name"));
+        compareResultsWithGold(bucket1, "src/test/resources/assembled_joins/outer.join.output.gold", new Fields("name"));
     }
 }
