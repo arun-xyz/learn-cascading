@@ -25,7 +25,7 @@ public class ProjectionSelectionFlow implements CascadingFlows{
 
         Pipe sampleInputPipe = new Pipe("sampleInputPipe");
 
-        String expression  = "((salary<121))";
+        String expression  = "(salary<121)";
 //        String expression  = "((salary>120) ? (double) salary : 0.0D)";
 //        ExpressionFunction expressionFunction = new ExpressionFunction(new Fields( "high_salary"), expression, Double.class);
         ExpressionFilter expressionFilter = new ExpressionFilter(expression, Double.class);

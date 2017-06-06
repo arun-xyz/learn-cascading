@@ -30,7 +30,7 @@ public class SumAggregator extends BaseOperation<SumAggregator.Context> implemen
     public void aggregate(FlowProcess flowProcess, AggregatorCall<Context> aggregatorCall) {
 
         double value = aggregatorCall.getArguments().getDouble("salary");
-        aggregatorCall.getContext().setSum(aggregatorCall.getContext().getSum() * value);
+        aggregatorCall.getContext().setSum(aggregatorCall.getContext().getSum() + value);
     }
 
     @Override

@@ -15,6 +15,8 @@ public class CascadingJobConfiguration {
 
     public static Properties getConfiguration(int numReducers) {
         Properties properties = new Properties();
+        properties.setProperty("mapred.job.queue.name","search");
+        properties.setProperty("io.compression.codecs","org.apache.hadoop.io.compress.SnappyCodec,org.apache.hadoop.io.compress.GzipCodec,org.apache.hadoop.io.compress.DefaultCodec,org.apache.hadoop.io.compress.BZip2Codec");
 
 //         loading action conf prepared by Oozie
         String actionXml = System.getProperty("oozie.action.conf.xml");

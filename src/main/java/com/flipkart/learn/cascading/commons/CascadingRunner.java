@@ -2,7 +2,8 @@ package com.flipkart.learn.cascading.commons;
 
 import cascading.flow.Flow;
 import cascading.flow.FlowDef;
-import cascading.flow.local.LocalFlowConnector;
+import cascading.flow.hadoop2.Hadoop2MR1FlowConnector;
+import cascading.property.AppProps;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
@@ -21,18 +22,19 @@ public class CascadingRunner {
         List<String> list = Arrays.asList(args);
 
         list.forEach(arg -> options.put(arg.split("=")[0],arg.split("=")[1]));
-        log.debug(""+options);
-        log.debug(""+options.get("flowName"));
 
         // Now lets get the appropriate Flow from Flow Factory.
         CascadingFlows cascadingFlow = CascadingFlowFactory.getCascadingFlow(options.get("flowName"));
         FlowDef flowDef = cascadingFlow.getFlowDefinition(options);
 
-//        final Properties properties = CascadingJobConfiguration.getConfiguration(500);
-        final Properties properties = new Properties();
+        final Properties properties = CascadingJobConfiguration.getConfiguration(500);
+//        final Properties properties = new Properties();
 
+        AppProps.addApplicationTag(properties, "sample app");
+        AppProps.setApplicationJarClass(properties, CascadingRunner.class);
+        AppProps.setApplicationName(properties, "FirstSampleApp");
         // Run the flow
-        LocalFlowConnector flowConnector = new LocalFlowConnector(properties);
+        Hadoop2MR1FlowConnector flowConnector = new Hadoop2MR1FlowConnector(properties);
         Flow wcFlow = flowConnector.connect(flowDef);
         wcFlow.complete();
     }

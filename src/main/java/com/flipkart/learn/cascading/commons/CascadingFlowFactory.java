@@ -1,7 +1,9 @@
 package com.flipkart.learn.cascading.commons;
 
 import com.flipkart.learn.cascading.assemblyjoins.AssembledJoinsFlow;
+import com.flipkart.learn.cascading.data_selection.DataSelectionFlow;
 import com.flipkart.learn.cascading.group_aggregation.GroupAggregatorFlow;
+import com.flipkart.learn.cascading.pass_through.PassThroughFlow;
 import com.flipkart.learn.cascading.plain_copier.PlainCopierFlow;
 import com.flipkart.learn.cascading.projection_selection.ProjectionSelectionFlow;
 import com.flipkart.learn.cascading.various_joins.VariousJoinsFlow;
@@ -23,6 +25,10 @@ public class CascadingFlowFactory {
                 return new VariousJoinsFlow();
             case "assembled-joins":
                 return new AssembledJoinsFlow();
+            case "pass-through":
+                return new PassThroughFlow();
+            case "data-selection":
+                return new DataSelectionFlow();
             default:
                 throw new IllegalArgumentException("Appropriate factory is not available for this runtime configuration in Bucket:");
         }

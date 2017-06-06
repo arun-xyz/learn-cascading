@@ -48,6 +48,5 @@ public class VariousJoinsFlow implements CascadingFlows{
                 .addSource(incomingRegionAveragePipe, incomingRegionAverageTap )
                 .addTailSink(innerJoinedEmployeeAveragePipe, innerJoinedInformation)
                 .addTailSink(outerJoinedEmployeeAveragePipe, outerJoinedInformation);
-
     }
 }

@@ -1,12 +1,16 @@
 package com.flipkart.learn.cascading.plain_copier;
 
+import cascading.avro.AvroScheme;
 import cascading.flow.FlowDef;
 import cascading.operation.AssertionLevel;
+import cascading.pipe.Each;
 import cascading.pipe.Pipe;
-import cascading.scheme.local.TextLine;
+import cascading.scheme.Scheme;
+import cascading.scheme.hadoop.TextLine;
 import cascading.tap.SinkMode;
-import cascading.tap.Tap;
-import cascading.tap.local.FileTap;
+import cascading.tap.hadoop.GlobHfs;
+import cascading.tap.hadoop.Hfs;
+import cascading.tuple.Fields;
 import com.flipkart.learn.cascading.commons.CascadingFlows;
 
 import java.util.Map;
@@ -17,11 +21,14 @@ import java.util.Map;
 public class PlainCopierFlow implements CascadingFlows {
     @Override
     public FlowDef getFlowDefinition(Map<String, String> options) {
-        Tap sampleInputSource = new FileTap(new TextLine(), options.get("input"));
+        GlobHfs sampleInputSource = new GlobHfs((Scheme)new AvroScheme(), options.get("input"));
 
         Pipe sampleInputPipe = new Pipe("sampleInputPipe");
 
-        Tap sampleOutputSink = new FileTap(new TextLine(), options.get("output"), SinkMode.REPLACE);
+        sampleInputPipe = new Each(sampleInputPipe, new Fields("searchAttributes"),
+                new CustomRowHolder(new Fields("output")), Fields.RESULTS);
+
+        Hfs sampleOutputSink = new Hfs(new TextLine(new Fields("searchAttributes")), options.get("output"), SinkMode.REPLACE);
 
         return FlowDef.flowDef().setName(options.get("flowName"))
                 .addSource(sampleInputPipe, sampleInputSource)
