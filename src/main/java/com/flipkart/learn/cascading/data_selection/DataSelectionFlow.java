@@ -18,20 +18,13 @@ import java.util.Map;
 public class DataSelectionFlow implements CascadingFlows {
     @Override
     public FlowDef getFlowDefinition(Map<String, String> options) {
-        Tap inputSource = new FileTap(new TextDelimited(new Fields("name", "place", "salary"), ","), options.get("inputpath"));
+        Tap inputSource = new FileTap(new TextDelimited(new Fields("name", "place", "salary"), ","), options.get("input"));
 
-//        Pipe inputPipe = new Pipe("inputPipe");
+        String expression = "((salary>120)?(double)salary*0.1:(double)salary*0.2)";
+        ExpressionFunction expressionFunction = new ExpressionFunction(new Fields("bonus"), expression, Double.class);
 
-//        String expression = "(salary<120)";
-//        ExpressionFilter expressionFilter = new ExpressionFilter(expression, Double.class);
-
-
-        String expression = "((salary>120)?(double)salary*0.1:(double)salary*0.5)";
-        ExpressionFunction expressionFilter = new ExpressionFunction(new Fields("bonus"), expression, Double.class);
-
-
-        Pipe inputPipe = new Each("inputPipe", expressionFilter, Fields.ALL);
-        Tap outputSink = new FileTap(new TextDelimited(new Fields("name", "salary", "bonus")), options.get("outputpath"));
+        Pipe inputPipe = new Each("inputPipe", expressionFunction, Fields.ALL);
+        Tap outputSink = new FileTap(new TextDelimited(new Fields("name", "salary", "bonus")), options.get("output"));
 
         return FlowDef.flowDef().addSource(inputPipe, inputSource)
                 .addTailSink(inputPipe, outputSink);

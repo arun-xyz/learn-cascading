@@ -25,16 +25,14 @@ public class ProjectionSelectionFlow implements CascadingFlows{
 
         Pipe sampleInputPipe = new Pipe("sampleInputPipe");
 
-        String expression  = "(salary<121)";
-//        String expression  = "((salary>120) ? (double) salary : 0.0D)";
-//        ExpressionFunction expressionFunction = new ExpressionFunction(new Fields( "high_salary"), expression, Double.class);
+        String expression  = "(salary<199)";
         ExpressionFilter expressionFilter = new ExpressionFilter(expression, Double.class);
 
         Pipe highSalaryPipe = new Each(sampleInputPipe,expressionFilter);
 
-        highSalaryPipe = new Retain(highSalaryPipe, new Fields( "place", "name"));
+        highSalaryPipe = new Retain(highSalaryPipe, new Fields( "name", "place"));
 
-        Tap sampleOutputSink = new FileTap(new TextLine(new Fields("high_salary")), options.get("output"), SinkMode.REPLACE);
+        Tap sampleOutputSink = new FileTap(new TextLine(), options.get("output"), SinkMode.REPLACE);
 
         return FlowDef.flowDef().setName(options.get("flowName"))
                 .addSource(sampleInputPipe, sampleInputSource)
